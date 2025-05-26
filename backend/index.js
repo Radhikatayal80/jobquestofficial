@@ -16,7 +16,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-const allowedOrigins = [process.env.FRONTEND_URL, "http://localhost:5173"];
+const allowedOrigins = [
+  "https://jobquestofficial-frontend.vercel.app",  // hardcoded frontend URL
+  "http://localhost:5173"                           // local dev URL
+];
+
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -27,10 +31,11 @@ const corsOptions = {
   },
   credentials: true,
 };
+
 app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
-  res.send("API is running...");
+  res.send("JobQuest Backend API is running...");
 });
 
 app.use("/api/v1/user", userRoute);
@@ -44,10 +49,10 @@ const startServer = async () => {
   try {
     await connectDB();
     app.listen(PORT, () => {
-      console.log(`Server running at port ${PORT}`);
+      console.log(`✅ Server running on port ${PORT}`);
     });
   } catch (error) {
-    console.error("Failed to connect to DB", error);
+    console.error("❌ Failed to connect to DB:", error);
     process.exit(1);
   }
 };
